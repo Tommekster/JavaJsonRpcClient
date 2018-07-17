@@ -25,6 +25,7 @@ package com.github.tommekster.jsonRpcClient.Example;
 
 import com.github.tommekster.jsonRpcClient.JsonRpcError;
 import com.github.tommekster.jsonRpcClient.JsonRpcInvoker;
+import com.github.tommekster.jsonRpcClient.JsonRpcProxy;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,20 +38,27 @@ import org.json.simple.parser.ParseException;
  *
  * @author Tomáš Zikmund <tommekster@gmail.com>
  */
-public class JSONRPCExample {
+public class JSONRPCExample
+{
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         try {
             URL url = new URL("http://localhost:8000/rpcdemo/default/call/jsonrpc");
             JsonRpcInvoker invoker = new JsonRpcInvoker();
-            
+
             Object message = invoker.invoke(url, "hello");
-            Object addition = invoker.invoke(url, "add",1,2);
-            SimpleObject simpleObject = invoker.invoke(SimpleObject.class, url, "getSimpleObject");
+            Object addition = invoker.invoke(url, "add", 1, 2);
+
+            SimpleService service = JsonRpcProxy.getProxy(url, SimpleService.class);
+            SimpleObject simpleObject = service.getSimpleObject();
+            //Object[] objectsArray = service.getSimpleObjects(3);
+            //SimpleObject simpleObject = invoker.invoke(SimpleObject.class, url, "getSimpleObject");
             Object[] objectsArray = invoker.invoke(SimpleObject[].class, url, "getSimpleObjects",3);
+
             
             System.out.println(message);
             System.out.println(addition);

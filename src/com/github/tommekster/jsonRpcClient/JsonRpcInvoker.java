@@ -47,7 +47,7 @@ public class JsonRpcInvoker
 
     public JsonRpcInvoker()
     {
-        this.client = new HTTPClient();
+        this(new HTTPClient());
     }
 
     public JsonRpcInvoker(HTTPClient client)
@@ -71,12 +71,15 @@ public class JsonRpcInvoker
     public Object invoke(URL url, String method)
             throws IOException, ParseException, JsonRpcError
     {
-        return this.invoke(url, method, new Object[0]);
+        return this.invoke(url, method, null);
     }
 
     public Object invoke(URL url, String method, Object... params)
             throws IOException, ParseException, JsonRpcError
     {
+        if(params == null){
+            params = new Object[0];
+        }
         JSONObject invocation = this.invokeJSON(method, params);
         byte[] response = this.client.post(url, invocation.toJSONString()
                 .getBytes(Charset.forName(charsetName)), charsetName);
