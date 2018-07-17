@@ -58,7 +58,7 @@ public class JsonRpcInvoker
     public <T> T invoke(Class<T> type, URL url, String method)
             throws IOException, ParseException, JsonRpcError
     {
-        return this.invoke(type, url, method, new Object[0]);
+        return this.invoke(type, url, method, null);
     }
 
     public <T> T invoke(Class<T> type, URL url, String method, Object... params)

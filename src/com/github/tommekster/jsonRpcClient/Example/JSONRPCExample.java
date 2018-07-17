@@ -55,9 +55,9 @@ public class JSONRPCExample
 
             SimpleService service = JsonRpcProxy.getProxy(url, SimpleService.class);
             SimpleObject simpleObject = service.getSimpleObject();
-            //Object[] objectsArray = service.getSimpleObjects(3);
+            SimpleObject[] objectsArray = service.getSimpleObjects(3);
             //SimpleObject simpleObject = invoker.invoke(SimpleObject.class, url, "getSimpleObject");
-            Object[] objectsArray = invoker.invoke(SimpleObject[].class, url, "getSimpleObjects",3);
+            //SimpleObject[] objectsArray = invoker.invoke(SimpleObject[].class, url, "getSimpleObjects",3);
 
             
             System.out.println(message);

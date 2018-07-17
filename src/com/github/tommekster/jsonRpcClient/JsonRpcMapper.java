@@ -24,6 +24,7 @@
 package com.github.tommekster.jsonRpcClient;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,10 @@ public class JsonRpcMapper
     public <T> T map(Object object, Class<T> type)
     {
         if (type.isArray()) {
-            return (T) this.mapArray((JSONArray) object, type.getComponentType());
+            Object [] array = this.mapArray((JSONArray) object, type.getComponentType());
+            Object [] output = (Object[]) Array.newInstance(type.getComponentType(), array.length);
+            System.arraycopy(array, 0, output, 0, array.length);
+            return type.cast(output);
         } else {
             return this.mapObject((JSONObject) object, type);
         }
