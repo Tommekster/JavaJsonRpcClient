@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Tomáš.
+ * Copyright 2018 Tomáš Zikmund <tommekster@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,20 +23,18 @@
  */
 package com.github.tommekster.jsonRpcClient.Example;
 
+import com.github.tommekster.jsonRpcClient.convertors.JsonRpcConvertor;
+import com.github.tommekster.jsonRpcClient.JsonRpcDataMember;
+import com.github.tommekster.jsonRpcClient.convertors.DefaultDateConvertor;
+import java.util.Date;
+
 /**
  *
- * @author Tomáš
+ * @author Tomáš Zikmund <tommekster@gmail.com>
  */
-public interface SimpleService
+public class ObjectWithDate
 {
-
-    public SimpleObject getSimpleObject();
-
-    public SimpleObject[] getSimpleObjects(int count);
-    
-    public ComplexObject getComplexObject();
-
-    public String[] getMonths();
-    
-    public ObjectWithDate getObjectWithDate();
+    @JsonRpcDataMember
+    @JsonRpcConvertor(convertor = DefaultDateConvertor.class)
+    public Date created;
 }

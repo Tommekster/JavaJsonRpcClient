@@ -23,6 +23,8 @@
  */
 package com.github.tommekster.jsonRpcClient;
 
+import com.github.tommekster.jsonRpcClient.convertors.JsonRpcConvertor;
+import com.github.tommekster.jsonRpcClient.convertors.JsonRpcTypeConvertor;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -81,10 +83,7 @@ public class JsonRpcMapper
                 {
                     try
                     {
-                        Class<?> fieldType = f.getType();
-                        String fieldName = this.getFieldName(f);
-                        Object value = this.map(object.get(fieldName), fieldType);
-                        f.set(dest, fieldType.cast(value));
+                        this.setField(f, object, dest);
                     }
                     catch (IllegalArgumentException | IllegalAccessException ex)
                     {
@@ -92,6 +91,19 @@ public class JsonRpcMapper
                     }
                 });
         return dest;
+    }
+
+    private void setField(Field f, JSONObject object, Object dest)
+            throws IllegalAccessException, IllegalArgumentException
+    {
+        Class<?> fieldType = f.getType();
+        String fieldName = this.getFieldName(f);
+        JsonRpcConvertor convertor = f.getAnnotation(JsonRpcConvertor.class);
+        Object content = object.get(fieldName);
+        Object value = (convertor != null)
+                ? this.convert(content, convertor)
+                : this.map(content, fieldType);
+        f.set(dest, fieldType.cast(value));
     }
 
     private boolean isTypeSimple(Class<?> type)
@@ -108,5 +120,19 @@ public class JsonRpcMapper
         JsonRpcDataMember annotation = field.getAnnotation(JsonRpcDataMember.class);
         String name = annotation.name();
         return !name.isEmpty() ? name : field.getName();
+    }
+
+    private Object convert(Object content, JsonRpcConvertor annotation)
+    {
+        try
+        {
+            JsonRpcTypeConvertor convertor = annotation.convertor().newInstance();
+            return convertor.convert(content);
+        }
+        catch (InstantiationException | IllegalAccessException ex)
+        {
+            Logger.getLogger(JsonRpcMapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

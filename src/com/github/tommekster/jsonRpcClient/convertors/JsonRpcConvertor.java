@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Tomáš.
+ * Copyright 2018 Tomáš Zikmund <tommekster@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.tommekster.jsonRpcClient.Example;
+package com.github.tommekster.jsonRpcClient.convertors;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
- * @author Tomáš
+ * @author Tomáš Zikmund <tommekster@gmail.com>
  */
-public interface SimpleService
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface JsonRpcConvertor
 {
-
-    public SimpleObject getSimpleObject();
-
-    public SimpleObject[] getSimpleObjects(int count);
-    
-    public ComplexObject getComplexObject();
-
-    public String[] getMonths();
-    
-    public ObjectWithDate getObjectWithDate();
+    Class<? extends JsonRpcTypeConvertor> convertor();
 }

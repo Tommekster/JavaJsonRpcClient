@@ -47,6 +47,10 @@ def getComplexObject():
 @service.jsonrpc
 def getMonths():
     return ['january', 'february', 'march', 'April', 'May', '...']
+
+@service.jsonrpc
+def getObjectWithDate():
+    return dict(created='2018-08-20')
 ```
 
 ## References

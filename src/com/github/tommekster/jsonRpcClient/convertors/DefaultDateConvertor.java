@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Tomáš.
+ * Copyright 2018 Tomáš Zikmund <tommekster@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.tommekster.jsonRpcClient.Example;
+package com.github.tommekster.jsonRpcClient.convertors;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author Tomáš
+ * @author Tomáš Zikmund <tommekster@gmail.com>
  */
-public interface SimpleService
+public class DefaultDateConvertor implements JsonRpcTypeConvertor
 {
+    @Override
+    public Object convert(Object o)
+    {
+        try
+        {
+            return this.getDateFormat().parse((String) o);
+        }
+        catch (ParseException ex)
+        {
+            Logger.getLogger(DefaultDateConvertor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new Date(0);
+    }
 
-    public SimpleObject getSimpleObject();
-
-    public SimpleObject[] getSimpleObjects(int count);
+    @Override
+    public Object convertBack(Object o)
+    {
+        return this.getDateFormat().format((Date)o);
+    }
     
-    public ComplexObject getComplexObject();
-
-    public String[] getMonths();
+    private DateFormat getDateFormat(){
+        return new SimpleDateFormat("yyyy-MM-dd");
+    }
     
-    public ObjectWithDate getObjectWithDate();
 }
