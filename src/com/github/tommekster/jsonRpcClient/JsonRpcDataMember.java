@@ -36,5 +36,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface JsonRpcDataMember
 {
-    
+    String name() default "";
 }

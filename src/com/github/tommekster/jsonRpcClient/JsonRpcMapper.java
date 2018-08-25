@@ -24,6 +24,7 @@
 package com.github.tommekster.jsonRpcClient;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,15 +76,14 @@ public class JsonRpcMapper
             return null;
         }
         Arrays.stream(type.getFields())
-                .filter(f -> object.containsKey(f.getName()))
-                .filter(f -> Arrays.stream(f.getAnnotations()).anyMatch(a -> a instanceof JsonRpcDataMember))
+                .filter(f -> f.getAnnotation(JsonRpcDataMember.class) != null)
                 .forEach(f ->
                 {
-                    Class<?> fieldType = f.getType();
-                    Object value;
-                    value = this.map(object.get(f.getName()), fieldType);
                     try
                     {
+                        Class<?> fieldType = f.getType();
+                        String fieldName = this.getFieldName(f);
+                        Object value = this.map(object.get(fieldName), fieldType);
                         f.set(dest, fieldType.cast(value));
                     }
                     catch (IllegalArgumentException | IllegalAccessException ex)
@@ -101,5 +101,12 @@ public class JsonRpcMapper
             String.class, Number.class, Long.class, Double.class, Boolean.class
         };
         return Stream.of(simpleTypes).anyMatch(t -> type.isAssignableFrom(t));
+    }
+
+    private String getFieldName(Field field)
+    {
+        JsonRpcDataMember annotation = field.getAnnotation(JsonRpcDataMember.class);
+        String name = annotation.name();
+        return !name.isEmpty() ? name : field.getName();
     }
 }

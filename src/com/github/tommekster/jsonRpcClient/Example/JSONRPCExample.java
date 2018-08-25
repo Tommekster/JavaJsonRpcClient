@@ -67,7 +67,7 @@ public class JSONRPCExample
             System.out.println(simpleObject);
             System.out.println(Arrays.toString(objectsArray));
             System.out.println(complex);
-            System.out.println(months);
+            System.out.println(Arrays.toString(months));
         }
         catch (MalformedURLException ex)
         {

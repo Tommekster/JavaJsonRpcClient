@@ -5,8 +5,8 @@ import com.github.tommekster.jsonRpcClient.JsonRpcDataMember;
 
 public class SimpleObject
 {
-    @JsonRpcDataMember
-    public String name;
+    @JsonRpcDataMember(name = "name")
+    public String objectName;
     
     @JsonRpcDataMember
     public String address;
