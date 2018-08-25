@@ -23,14 +23,13 @@
  */
 package com.github.tommekster.jsonRpcClient;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -43,12 +42,15 @@ public class JsonRpcMapper
 
     public <T> T map(Object object, Class<T> type)
     {
-        if (type.isArray()) {
-            Object [] array = this.mapArray((JSONArray) object, type.getComponentType());
-            Object [] output = (Object[]) Array.newInstance(type.getComponentType(), array.length);
+        if (type.isArray())
+        {
+            Object[] array = this.mapArray((JSONArray) object, type.getComponentType());
+            Object[] output = (Object[]) Array.newInstance(type.getComponentType(), array.length);
             System.arraycopy(array, 0, output, 0, array.length);
             return type.cast(output);
-        } else {
+        }
+        else
+        {
             return this.mapObject((JSONObject) object, type);
         }
     }
@@ -65,30 +67,48 @@ public class JsonRpcMapper
     public <T> T mapObject(JSONObject object, Class<T> type)
     {
         T dest;
-        try {
+        try
+        {
             dest = type.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
+        }
+        catch (InstantiationException | IllegalAccessException ex)
+        {
             Logger.getLogger(JsonRpcMapper.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
         Arrays.stream(type.getFields())
                 .filter(f -> object.containsKey(f.getName()))
                 .filter(f -> Arrays.stream(f.getAnnotations()).anyMatch(a -> a instanceof JsonRpcDataMember))
-                .forEach(f -> {
+                .forEach(f ->
+                {
                     Class<?> fieldType = f.getType();
                     Object value;
-                    if (fieldType.isArray()) {
-                        value = this.mapArray((JSONArray) object.get(f.getName()),
-                                fieldType.getComponentType());
-                    } else {
+                    if (this.isTypeSimple(fieldType))
+                    {
                         value = object.get(f.getName());
                     }
-                    try {
+                    else
+                    {
+                        value = this.map(object.get(f.getName()), fieldType);
+                    }
+                    try
+                    {
                         f.set(dest, fieldType.cast(value));
-                    } catch (IllegalArgumentException | IllegalAccessException ex) {
+                    }
+                    catch (IllegalArgumentException | IllegalAccessException ex)
+                    {
                         Logger.getLogger(JsonRpcMapper.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
         return dest;
+    }
+
+    private boolean isTypeSimple(Class<?> type)
+    {
+        Class<?>[] simpleTypes = new Class<?>[]
+        {
+            String.class, Number.class, Long.class, Double.class, Boolean.class
+        };
+        return Stream.of(simpleTypes).anyMatch(t -> type.isAssignableFrom(t));
     }
 }

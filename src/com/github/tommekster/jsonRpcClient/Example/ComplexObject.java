@@ -23,16 +23,17 @@
  */
 package com.github.tommekster.jsonRpcClient.Example;
 
+import com.github.tommekster.jsonRpcClient.JsonRpcDataMember;
+
 /**
  *
- * @author Tomáš
+ * @author Tomáš Zikmund
  */
-public interface SimpleService
+public class ComplexObject
 {
-
-    public SimpleObject getSimpleObject();
-
-    public SimpleObject[] getSimpleObjects(int count);
+    @JsonRpcDataMember
+    public SimpleObject firstObject;
     
-    public ComplexObject getComplexObject();
+    @JsonRpcDataMember
+    public SimpleObject[] objectsList;
 }

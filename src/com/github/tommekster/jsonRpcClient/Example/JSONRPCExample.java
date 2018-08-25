@@ -46,7 +46,8 @@ public class JSONRPCExample
      */
     public static void main(String[] args)
     {
-        try {
+        try
+        {
             URL url = new URL("http://localhost:8000/rpcdemo/default/call/jsonrpc");
             JsonRpcInvoker invoker = new JsonRpcInvoker();
 
@@ -58,15 +59,20 @@ public class JSONRPCExample
             SimpleObject[] objectsArray = service.getSimpleObjects(3);
             //SimpleObject simpleObject = invoker.invoke(SimpleObject.class, url, "getSimpleObject");
             //SimpleObject[] objectsArray = invoker.invoke(SimpleObject[].class, url, "getSimpleObjects",3);
+            ComplexObject complex = service.getComplexObject();
 
-            
             System.out.println(message);
             System.out.println(addition);
             System.out.println(simpleObject);
             System.out.println(Arrays.toString(objectsArray));
-        } catch (MalformedURLException ex) {
+            System.out.println(complex);
+        }
+        catch (MalformedURLException ex)
+        {
             Logger.getLogger(JSONRPCExample.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | ParseException | JsonRpcError ex) {
+        }
+        catch (IOException | ParseException | JsonRpcError ex)
+        {
             Logger.getLogger(JSONRPCExample.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

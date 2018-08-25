@@ -101,6 +101,7 @@ public class JsonRpcInvoker
         JSONObject result = (JSONObject) this.parser.parse(new String(response));
         if (result.get("error") != null)
         {
+            System.out.println(result.toJSONString());
             throw new JsonRpcError(result);
         }
         return result.get("result");

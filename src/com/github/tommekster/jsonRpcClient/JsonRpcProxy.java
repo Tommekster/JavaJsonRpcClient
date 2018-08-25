@@ -30,7 +30,7 @@ import java.net.URL;
 
 /**
  *
- * @author Tomáš
+ * @author Tomáš Zikmund
  */
 public class JsonRpcProxy implements InvocationHandler
 {
@@ -50,6 +50,7 @@ public class JsonRpcProxy implements InvocationHandler
         return this.invoker.invoke(method.getReturnType(), this.url, method.getName(), args);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T getProxy(URL url, Class<T> clazz)
     {
         return getProxy(url, new JsonRpcInvoker(), clazz);
