@@ -2,10 +2,10 @@
 
 This is very simple implementation of [JSON RPC](https://en.wikipedia.org/wiki/JSON-RPC) client-side for JAVA. 
 The project contains a package with the library and a package with an example. 
-The library uses (JSON.simple)[https://code.google.com/archive/p/json-simple/] library. 
+The library uses [JSON.simple](https://code.google.com/archive/p/json-simple/) library. 
 
 The JSON RPC server-side for examples is implemented in 
-(Web2py)[http://web2py.com/books/default/chapter/29/10/services#JSONRPC]
+[Web2py](http://web2py.com/books/default/chapter/29/10/services#JSONRPC)
 web framework. 
 
 ## Server-side example in Web2py
