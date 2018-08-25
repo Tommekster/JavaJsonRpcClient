@@ -35,4 +35,6 @@ public interface SimpleService
     public SimpleObject[] getSimpleObjects(int count);
     
     public ComplexObject getComplexObject();
+
+    public String[] getMonths();
 }

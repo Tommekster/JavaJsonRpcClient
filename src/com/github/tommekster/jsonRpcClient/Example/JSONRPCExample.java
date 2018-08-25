@@ -60,12 +60,14 @@ public class JSONRPCExample
             //SimpleObject simpleObject = invoker.invoke(SimpleObject.class, url, "getSimpleObject");
             //SimpleObject[] objectsArray = invoker.invoke(SimpleObject[].class, url, "getSimpleObjects",3);
             ComplexObject complex = service.getComplexObject();
+            String[] months = service.getMonths();
 
             System.out.println(message);
             System.out.println(addition);
             System.out.println(simpleObject);
             System.out.println(Arrays.toString(objectsArray));
             System.out.println(complex);
+            System.out.println(months);
         }
         catch (MalformedURLException ex)
         {

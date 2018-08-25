@@ -25,10 +25,8 @@ package com.github.tommekster.jsonRpcClient;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -45,23 +43,23 @@ public class JsonRpcMapper
         if (type.isArray())
         {
             Object[] array = this.mapArray((JSONArray) object, type.getComponentType());
-            Object[] output = (Object[]) Array.newInstance(type.getComponentType(), array.length);
-            System.arraycopy(array, 0, output, 0, array.length);
-            return type.cast(output);
+            return type.cast(array);
         }
         else
         {
-            return this.mapObject((JSONObject) object, type);
+            return this.isTypeSimple(type) ? (T) object : this.mapObject((JSONObject) object, type);
         }
     }
 
     public <T> T[] mapArray(JSONArray array, Class<T> type)
     {
-        List<T> list = (List<T>) array.stream()
-                .map(o -> this.mapObject((JSONObject) o, type))
+        Object[] objects = array.stream()
+                .map(o -> this.map(o, type))
                 .filter(o -> o != null)
-                .collect(Collectors.toList());
-        return (T[]) list.toArray();
+                .toArray();
+        Object[] output = (Object[]) Array.newInstance(type, objects.length);
+        System.arraycopy(objects, 0, output, 0, objects.length);
+        return (T[]) output;
     }
 
     public <T> T mapObject(JSONObject object, Class<T> type)
@@ -83,14 +81,7 @@ public class JsonRpcMapper
                 {
                     Class<?> fieldType = f.getType();
                     Object value;
-                    if (this.isTypeSimple(fieldType))
-                    {
-                        value = object.get(f.getName());
-                    }
-                    else
-                    {
-                        value = this.map(object.get(f.getName()), fieldType);
-                    }
+                    value = this.map(object.get(f.getName()), fieldType);
                     try
                     {
                         f.set(dest, fieldType.cast(value));

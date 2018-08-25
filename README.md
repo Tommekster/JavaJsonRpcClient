@@ -43,6 +43,10 @@ def getSimpleObjects(cnt):
 @service.jsonrpc
 def getComplexObject():
     return dict(firstObject=getSimpleObject(), objectsList=getSimpleObjects(3))
+
+@service.jsonrpc
+def getMonths():
+    return ['january', 'february', 'march', 'April', 'May', '...']
 ```
 
 ## References

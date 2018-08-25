@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 
 /**
  *
- * @author Tomáš
+ * @author Tomáš Zikmund
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
