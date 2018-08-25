@@ -26,7 +26,7 @@ def call():
 
 @service.jsonrpc
 def hello():
-    return "Ahoj svete!"
+    return "Hello world!"
 
 @service.jsonrpc
 def add(a,b):
@@ -34,11 +34,11 @@ def add(a,b):
 
 @service.jsonrpc
 def getSimpleObject():
-    return dict(name='jmeno',address='addressa', order=123)
+    return dict(name='NaMe',address='domificile', order=123)
 
 @service.jsonrpc
 def getSimpleObjects(cnt):
-    return [dict(name='jmeno'+str(i),address='addressa'+str(i), order = 13*i) for i in range(cnt)]
+    return [dict(name='NaMe'+str(i),address='domificile'+str(i), order = 13*i) for i in range(cnt)]
 
 @service.jsonrpc
 def getComplexObject():
